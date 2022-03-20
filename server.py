@@ -1,27 +1,34 @@
 import socket
 import player
 import constants
-bind_ip = ''
-bind_port = 12001
-max_player = 5
+from threading import Thread
 
-servidor = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-servidor.bind(('',bind_port))
-player_connected = dict()
+class Server(Thread):
+    def __init__(self):
+        Thread.__init__(self)
+        self.ip_addess = ''
+        self.port = constants.PORT
+        self.max_player = 5
+        self.player_connected = dict()
+        self.server = self.createServer()
 
-
-while True:
-    msg_bytes, ip_cliente = servidor.recvfrom(2048)
-    if len(player_connected.keys()) < max_player and ip_cliente not in player_connected.keys():
-        player_connected[ip_cliente[0]] = player.Player(len(player_connected))
-        msg_resp = 'Player ' + str(len(player_connected)) + ' connected'
-        servidor.sendto(msg_resp.encode(), ip_cliente)
-        print(msg_resp)
-        print(player_connected)
-    elif len(player_connected.keys()) >= max_player and ip_cliente not in player_connected.keys():
-        msg_resp = constants.LOTATION_MESSAGE
-        servidor.sendto(msg_resp.encode(), ip_cliente)
-        continue
-    else:
-        msg_resp = 'você ja esta conectado'
-        servidor.sendto(msg_resp.encode(), ip_cliente)
+    def createServer(self):
+        server = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        server.bind((self.ip_addess, self.port))
+        print('Server: Server started')
+        return server
+    
+    def run(self):
+        while True:
+            msg_bytes, client_adress = self.server.recvfrom(2048)
+            if len(self.player_connected.keys()) < self.max_player and client_adress[0] not in self.player_connected.keys():
+                self.player_connected[client_adress[0]] = player.Player(len(self.player_connected))
+                msg_resp = 'Server: Player ' + str(len(self.player_connected)) + ' connected'
+                self.server.sendto(msg_resp.encode(), client_adress)
+            elif len(self.player_connected.keys()) >= self.max_player and client_adress[0] not in self.player_connected.keys():
+                msg_resp = 'Server: ' + constants.LOTATION_MESSAGE
+                self.server.sendto(msg_resp.encode(), client_adress)
+                continue
+            else:
+                msg_resp = 'Server: você ja esta conectado'
+                self.server.sendto(msg_resp.encode(), client_adress)
