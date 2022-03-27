@@ -1,31 +1,38 @@
 import socket
+import time
 import constants
+import help
+from threading import Thread
 
-class Client:
+class Client(Thread):
     def __init__(self):
+        Thread.__init__(self)
         self.client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.client_adress = self.get_local_ip()
+        self.clientAddress = help.getLocalIp()
+        self.serverAddress = None
 
-    def sendMessage(self):
+    def run(self):
+        self.joinTheGame()
         while True:
-            msg_send = input('Digite uma mensagem: ')
-            print(self.client_adress)
-            self.client.sendto(msg_send.encode(),(self.client_adress,constants.PORT))
-            msg_bytes, ip_serv = self.client.recvfrom(2048)
-            print(msg_bytes.decode())
+            bytesMessage, serverAddress = self.client.recvfrom(2048)
+            msg = bytesMessage.decode()
             
-            if msg_bytes.decode() == constants.LOTATION_MESSAGE:
+            if msg == constants.LOTATION_MESSAGE:
                 break
+            elif constants.JOINNED_PLAYER in msg:
+                print(msg.replace(constants.JOINNED_PLAYER, '').strip())
+            elif constants.REMOVE_PLAYER in msg:
+                print('Você saiu do Jogo')
+                break
+            elif msg == constants.DISCONNECTED_SERVER:
+                print(constants.DISCONNECTED_SERVER)
+                break
+            else:
+                print(msg)
+            
     
-    def get_local_ip(self):
-        try:
-            s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-            s.connect(('8.8.8.8', 80))
-            return s.getsockname()[0]
-        except socket.error:
-            try:
-                return socket.gethostbyname(socket.gethostname())
-            except socket.gaierror:
-                return '127.0.0.1'
-        finally:
-            s.close() 
+    def joinTheGame(self):
+        name = input('Digite seu nickname: ')
+        name += ' ' + constants.ADD_PLAYER
+        self.client.sendto(name.encode(),(self.serverAddress,constants.PORT))
+                

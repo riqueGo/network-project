@@ -1,4 +1,5 @@
 class Player:
-    def __init__(self, number):
-        self.number = number
-        self.name = 'Player ' + str(number)
+    def __init__(self, name):
+        self.name = name
+        self.score = 0
+        self.port = None
