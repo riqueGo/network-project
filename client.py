@@ -11,7 +11,6 @@ class Client(Thread):
         self.serverAddress = None
 
     def run(self):
-        self.joinTheGame()
         while True:
             bytesMessage, serverAddress = self.client.recvfrom(2048)
             msg = bytesMessage.decode()

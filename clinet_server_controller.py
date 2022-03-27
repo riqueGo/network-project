@@ -10,6 +10,7 @@ def createHostSession():
     time.sleep(1)
     host = Client()
     host.serverAddress = s.serverAddress
+    host.joinTheGame()
     host.start()
     time.sleep(1)
     chat(s.serverAddress)
@@ -44,3 +45,9 @@ def chat(serverAddress):
         else:
             message += ' ' + constants.CHAT
             sock.sendto(message.encode(), (serverAddress, constants.PORT))
+
+# def roundControl(clientPlayer):
+#     while True:
+#         clientPlayer.start()
+#         time.sleep(1)
+#         chat(clientPlayer.serverAddress)
