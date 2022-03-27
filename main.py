@@ -1,11 +1,7 @@
-import server
-import client
+import help
 
 def main():
-    s = server.Server()
-    s.start()
-    c = client.Client()
-    c.sendMessage()
+    help.menu()
 
 if __name__ == "__main__":
     main()
