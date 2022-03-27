@@ -8,7 +8,6 @@ class Client(Thread):
     def __init__(self):
         Thread.__init__(self)
         self.client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.clientAddress = help.getLocalIp()
         self.serverAddress = None
 
     def run(self):
