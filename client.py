@@ -1,5 +1,6 @@
 import socket
 import time
+from chat import Chat
 import constants
 import help
 from threading import Thread
@@ -11,6 +12,9 @@ class Client(Thread):
         self.serverAddress = None
 
     def run(self):
+        chat = Chat()
+        chat.serverAddress = self.serverAddress
+        chat.start()
         while True:
             bytesMessage, serverAddress = self.client.recvfrom(2048)
             msg = bytesMessage.decode()
@@ -25,12 +29,18 @@ class Client(Thread):
             elif msg == constants.DISCONNECTED_SERVER:
                 print(constants.DISCONNECTED_SERVER)
                 break
+            elif msg == constants.START_GAME:
+                chat.
             else:
                 print(msg)
             
     
-    def joinTheGame(self):
+    def joinPlayer(self):
         name = input('Digite seu nickname: ')
         name += ' ' + constants.ADD_PLAYER
         self.client.sendto(name.encode(),(self.serverAddress,constants.PORT))
+    
+    def joinTheGame(self):
+        address = input('Digite endereço da partida: ')
+        self.serverAddress = address
                 

@@ -3,6 +3,7 @@ import time
 import constants
 from server import Server
 from client import Client
+from chat import Chat
 
 def createHostSession():
     s = Server()
@@ -10,10 +11,9 @@ def createHostSession():
     time.sleep(1)
     host = Client()
     host.serverAddress = s.serverAddress
-    host.joinTheGame()
+    host.joinPlayer()
     host.start()
     time.sleep(1)
-    chat(s.serverAddress)
     turnOffServer(s)
 
 def getLocalIp():
@@ -46,8 +46,20 @@ def chat(serverAddress):
             message += ' ' + constants.CHAT
             sock.sendto(message.encode(), (serverAddress, constants.PORT))
 
-# def roundControl(clientPlayer):
-#     while True:
-#         clientPlayer.start()
-#         time.sleep(1)
-#         chat(clientPlayer.serverAddress)
+def roundControl(clientPlayer):
+    while True:
+        clientPlayer.start()
+        time.sleep(1)
+        c = Chat()
+        c.serverAddress = clientPlayer.ServerAddress
+        c.start()
+        chat(clientPlayer.serverAddress)
+
+def createSession():
+    player = Client()
+    player.joinTheGame()
+    player.joinPlayer()
+    c = Chat()
+    c.serverAddress = player.serverAddress
+    c.start()
+

@@ -11,7 +11,7 @@ def menu():
             clinet_server_controller.createHostSession()
             break
         elif choice == '2':
-            #TODO Client
+            clinet_server_controller.createSession()
             break
         else:
             print('Escolha uma opção válida: (\'1\' ou \'2\')\n\n')
