@@ -4,17 +4,24 @@ import constants
 from server import Server
 from client import Client
 from chat import Chat
+from timer import Timer
 
 def createHostSession():
     s = Server()
     s.start()
+    timer = Timer()
+    timer.serverAddress = s.serverAddress
+    timer.count = 60
+    timer.name = 'Vai começar a partida'
+    timer.start()
     time.sleep(1)
     host = Client()
     host.serverAddress = s.serverAddress
     host.joinPlayer()
+    print(host.serverAddress)
     host.start()
-    time.sleep(1)
-    turnOffServer(s)
+    # time.sleep(1)
+    # turnOffServer(s)
 
 def getLocalIp():
     try:
@@ -59,6 +66,7 @@ def createSession():
     player = Client()
     player.joinTheGame()
     player.joinPlayer()
+    player.start()
     c = Chat()
     c.serverAddress = player.serverAddress
     c.start()

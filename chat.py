@@ -13,7 +13,7 @@ class Chat(Thread):
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         while True:
             time.sleep(1)
-            message = input('$: ')
+            message = input()
             if message.upper() == constants.QUIT:
                 sock.sendto(constants.REMOVE_PLAYER.encode(), (self.serverAddress, constants.PORT))
                 break

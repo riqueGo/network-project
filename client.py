@@ -29,8 +29,6 @@ class Client(Thread):
             elif msg == constants.DISCONNECTED_SERVER:
                 print(constants.DISCONNECTED_SERVER)
                 break
-            elif msg == constants.START_GAME:
-                chat.
             else:
                 print(msg)
             

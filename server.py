@@ -15,6 +15,7 @@ class Server(Thread):
         self.server = self.createServer()
         game = GameMessages()
         game.serverAddress = self.serverAddress
+        game.createQuizList()
         while True:
             bytesMessage, clientAddress = self.server.recvfrom(2048)
             if self.stopServer:
@@ -29,4 +30,3 @@ class Server(Thread):
         server.bind((self.serverAddress, constants.PORT))
         print('Server started')
         return server
-    
