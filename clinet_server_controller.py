@@ -1,5 +1,4 @@
 import socket
-import time
 import constants
 from server import Server
 from client import Client
@@ -7,21 +6,34 @@ from chat import Chat
 from timer import Timer
 
 def createHostSession():
+    #Server Starts
     s = Server()
     s.start()
-    timer = Timer()
-    timer.serverAddress = s.serverAddress
-    timer.count = 60
-    timer.name = 'Vai começar a partida'
-    timer.start()
-    time.sleep(1)
+
+    #Instance of Timer Class
+    timer = Timer(constants.WAITING_ROOM, 3, s.serverAddress)
+
+    #Instance of Client class
     host = Client()
     host.serverAddress = s.serverAddress
     host.joinPlayer()
-    print(host.serverAddress)
+
+    #Starts client player
     host.start()
-    # time.sleep(1)
-    # turnOffServer(s)
+
+    #Starts Timer of waiting room
+    timer.start()
+    timer.join()
+    host.join()
+
+    turnOffServer(s)
+
+def createSession():
+    player = Client()
+    player.joinTheGame()
+    player.joinPlayer()
+    player.start()
+
 
 def getLocalIp():
     try:
@@ -40,34 +52,4 @@ def turnOffServer(server):
     server.stopServer = True
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     sock.sendto(constants.DISCONNECTED_SERVER.encode(), (server.serverAddress, constants.PORT))
-
-def chat(serverAddress):
-    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    while True:
-        time.sleep(1)
-        message = input('$: ')
-        if message.upper() == constants.QUIT:
-            sock.sendto(constants.REMOVE_PLAYER.encode(), (serverAddress, constants.PORT))
-            break
-        else:
-            message += ' ' + constants.CHAT
-            sock.sendto(message.encode(), (serverAddress, constants.PORT))
-
-def roundControl(clientPlayer):
-    while True:
-        clientPlayer.start()
-        time.sleep(1)
-        c = Chat()
-        c.serverAddress = clientPlayer.ServerAddress
-        c.start()
-        chat(clientPlayer.serverAddress)
-
-def createSession():
-    player = Client()
-    player.joinTheGame()
-    player.joinPlayer()
-    player.start()
-    c = Chat()
-    c.serverAddress = player.serverAddress
-    c.start()
 

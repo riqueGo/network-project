@@ -13,20 +13,18 @@ class Server(Thread):
 
     def run(self):
         self.server = self.createServer()
-        game = GameMessages()
-        game.serverAddress = self.serverAddress
-        game.createQuizList()
+        game = GameMessages(serverAddress = self.serverAddress)
         while True:
             bytesMessage, clientAddress = self.server.recvfrom(2048)
             if self.stopServer:
                 game.sendMessageToAllPlayers(constants.DISCONNECTED_SERVER)
                 break
-            message = game.wichMessage(bytesMessage.decode(), clientAddress)
+            message = game.wichServerMessage(bytesMessage.decode(), clientAddress)
             game.sendMessage(message, clientAddress)
         
 
     def createServer(self):
         server = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         server.bind((self.serverAddress, constants.PORT))
-        print('Server started')
+        print('Servidor Iniciado\nEndereço: ' + self.serverAddress + '\n')
         return server
