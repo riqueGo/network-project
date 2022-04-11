@@ -8,23 +8,25 @@ class Chat(Thread):
     def __init__(self):
         Thread.__init__(self)
         self.serverAddress = None
-        self.clientAddress = None
+        self.clientSocket = None
         self.isChatAlive = True
         self.isGameOn = False
     
     def run(self):
-        sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         while True:
             message = input()
             if message.upper() == constants.QUIT:
-                sock.sendto(constants.REMOVE_PLAYER.encode(), (self.serverAddress, constants.PORT))
-                sock.sendto(constants.REMOVE_PLAYER.encode(), self.clientAddress)
+                msg = constants.REMOVE_PLAYER + '#' + constants.REMOVE_PLAYER
+                self.clientSocket.sendto(msg.encode(), (self.serverAddress, constants.PORT))
+                self.clientSocket.sendto(msg.encode(), self.clientSocket.getsockname())
                 break
-            elif self.isChatAlive:
-                message += '#' + constants.CHAT
-                sock.sendto(message.encode(), (self.serverAddress, constants.PORT))
+            elif message.upper() == constants.START_COMMAND:
+                message += '#' + constants.GAME_START
             elif self.isGameOn:
                 message += '#' + constants.ANSWER
-                sock.sendto(message.encode(), (self.serverAddress, constants.PORT))
+            elif self.isChatAlive:
+                message += '#' + constants.CHAT
             else:
                 print('Não é possível enviar mensagem no momento')
+                continue
+            self.clientSocket.sendto(message.encode(), (self.serverAddress, constants.PORT))
