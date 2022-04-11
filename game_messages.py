@@ -13,22 +13,20 @@ class GameMessages:
         msg = tupleMessage[0]
         typeMsg = tupleMessage[1]
         if typeMsg == constants.ANSWER:
-            responseMessage = self.game.isCorrectAnswer(msg, clientAddress[0])
+            responseMessage = self.game.checkAnswer(msg, clientAddress[0])
         elif typeMsg == constants.CHAT:
-            responseMessage = (msg, constants.ALL_PLAYER_MESSAGE)
+            responseMessage = self.game.chatMessage(msg, clientAddress[0])
         elif typeMsg == constants.TIMEOUT:
-            if msg == constants.WAITING_ROOM:
-                self.sendMessageToAllPlayers(constants.GAME_STARTED)
-                self.game.timer.start()
-            else:
-                self.game.timer.isRest = False
-            responseMessage = self.game.startRound()
+            responseMessage = self.game.timeoutMessage()
+        elif typeMsg == constants.GAME_START and (clientAddress[0] == self.serverAddress or clientAddress[0] in constants.HOST_ADDRESS):
+            self.sendMessageToAllPlayers(constants.GAME_START + '#' + constants.GAME_START)
+            responseMessage = self.game.gameStartMessage()
         elif typeMsg == constants.ADD_PLAYER:
             responseMessage = self.game.addNewPlayer(msg, clientAddress)
         elif typeMsg == constants.REMOVE_PLAYER:
-            responseMessage = ((constants.DISCONNECTED_SERVER, constants.ALL_PLAYER_MESSAGE) if clientAddress[0] == self.serverAddress else self.game.removePlayer(clientAddress[0]))
+            responseMessage = self.game.removePlayer(clientAddress[0])
         else:
-            responseMessage = (msg, constants.SINGLE_PLAYER_MESSAGE)
+            responseMessage = (msg + '#' + constants.PRINT_MESSAGE, constants.SINGLE_PLAYER_MESSAGE)
         return responseMessage
     
     def sendMessage(self, message, clientAddress):
@@ -47,4 +45,3 @@ class GameMessages:
     
     def sendMessageToSinglePlayer(self, message, clientAddress):
         self.sock.sendto(message.encode(), clientAddress)
-    

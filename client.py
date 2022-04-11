@@ -1,43 +1,91 @@
 import socket
 import time
+import client_server_controller
 from chat import Chat
 import constants
 from threading import Thread
+import help
 
 class Client(Thread):
     def __init__(self):
         Thread.__init__(self)
         self.client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.clientAddress = client_server_controller.getLocalIp()
         self.serverAddress = None
-        self.breakMessages = [constants.LOTATION_MESSAGE, constants.REMOVE_PLAYER, constants.DISCONNECTED_SERVER, constants.GAME_ENDED]
+        self.breakMessages = [constants.REMOVE_PLAYER, constants.DISCONNECTED_SERVER]
+        self.clientOn = True
+        self.name = None
+        self.chat = Chat()
 
     def run(self):
-        chat = Chat()
-        chat.serverAddress = self.serverAddress
-        chat.clientAddress = self.client.getsockname()
-        chat.start()
-        while True:
+        while self.clientOn:
             bytesMessage, serverAddress = self.client.recvfrom(2048)
-            msg = bytesMessage.decode()
-            if msg in self.breakMessages:
-                print(msg)
-                break
-            elif msg == constants.GAME_STARTED:
-                chat.isChatAlive = False
-                chat.isGameOn = True
-            else:
-                print(msg)
-            
-            
+            self.wichClientMessage(bytesMessage.decode())
+    
+    def wichClientMessage(self, responseMessage):
+        tupleMessage = responseMessage.split('#')
+        msg = tupleMessage[0]
+        typeMsg = tupleMessage[1]
+
+        if typeMsg in self.breakMessages:
+            print(msg + '\n') 
+            self.clientOn = False
+        elif typeMsg == constants.GAME_START:
+            print('Chat Desligado, bom jogo\n')
+            self.chat.isChatAlive = False
+            self.chat.isGameOn = True
+            print(msg + '\n') 
+        elif typeMsg == constants.GAME_ENDED:
+            self.chat.isChatAlive = True
+            self.chat.isGameOn = False
+            print(typeMsg + '\nPlacar final')
+            print(msg + '\n')
+            print('Chat Ligado\nPara sair da sala digite \'quit\'\nPara começar uma nova partida o host da sala deve digitar\'start\'') 
+        elif typeMsg == constants.LOTATION_MESSAGE:
+            self.isJoinAnotherRoom(typeMsg)
+        else:
+            print(msg + '\n') 
     
     def joinPlayer(self):
         time.sleep(1)
-        name = input('Digite seu nickname: ')
-        name += '#' + constants.ADD_PLAYER
-        self.client.sendto(name.encode(),(self.serverAddress,constants.PORT))
+        self.name = input('Digite seu nickname: ')
     
-    def joinTheGame(self):
-        time.sleep(1)
-        address = input('Digite endereço da partida: ')
-        self.serverAddress = address
+    def joinGameRoom(self):
+        player = self.name + '#' + constants.ADD_PLAYER
+        try:
+            self.client.sendto(player.encode(),(self.serverAddress,constants.PORT))
+            self.client.settimeout(2)
+            bytesMessage, serverAddress = self.client.recvfrom(2048)
+            self.client.settimeout(None)
+            self.wichClientMessage(bytesMessage.decode())
+        except:
+            self.isJoinAnotherRoom(constants.INVALID_ADDRESS)
+    
+    def startChat(self):
+        self.chat.serverAddress = self.serverAddress
+        self.chat.clientSocket = self.client
+        self.chat.start()
+    
+    def startGame(self):
+        self.joinPlayer()
+        self.getServerAddress()
+        self.joinGameRoom()
+        if self.clientOn:
+            self.startChat()
+            self.start()
+            self.join()
+    
+    def getServerAddress(self):
+        if self.serverAddress not in constants.HOST_ADDRESS and self.serverAddress != self.clientAddress:
+            time.sleep(1)
+            self.serverAddress = input('Digite endereço da partida: ') #If client is not a Host
+            print()
+    
+    def isJoinAnotherRoom(self, motive):
+        if help.joinAnotherRoom(motive):
+            self.startGame()
+        else:
+            self.clientOn = False
+
+
                 
