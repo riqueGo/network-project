@@ -4,7 +4,8 @@ from player import Player
 class Game:
     def __init__(self):
         self.listOfPlayers = dict()
-    
+        self.quizList = None
+
     def addNewPlayer(self, name, clientAddress):
         maxPlayer = 5
         ipAddress = clientAddress[0]

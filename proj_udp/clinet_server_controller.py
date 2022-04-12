@@ -13,8 +13,8 @@ def createHostSession():
     host.serverAddress = s.serverAddress
     host.joinPlayer()
     host.start()
-    time.sleep(1)
-    turnOffServer(s)
+    #time.sleep(1)
+    #turnOffServer(s)
 
 def getLocalIp():
     try:

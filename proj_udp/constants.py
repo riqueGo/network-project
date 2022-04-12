@@ -1,4 +1,3 @@
-from pexpect import TIMEOUT
 
 
 LOTATION_MESSAGE = 'LOTAÇÃO ESGOTADA!!'
