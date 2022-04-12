@@ -5,19 +5,31 @@ import time
 
 
 class Timer(Thread):
-    def __init__(self):
+    def __init__(self, t, serverAddress):
         Thread.__init__(self)
-        self.serverAddress = None
+        self.serverAddress = serverAddress
+        self.timeout = t
+        self.on = True
+        self.isRest = True
         self.count = 0
-        self.name = None
+
     
     def run(self):
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        t = 0
-        while True:
+        while self.on:
             time.sleep(1)
-            t+=1
-            if (t == self.count):
-                msg = self.name + constants.TIMEOUT
+            self.count+=1
+            if self.count == self.timeout:
+                msg = constants.START_ROUND + '#' + constants.TIMEOUT
                 sock.sendto(msg.encode(), (self.serverAddress, constants.PORT))
-                break
+                self.rest()
+                self.count = 0
+                self.isRest = True
+    
+    def rest(self):
+        while self.isRest:
+            continue
+    
+    def turnOff(self):
+        self.on = False
+        self.isRest = False
