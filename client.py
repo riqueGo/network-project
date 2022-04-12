@@ -41,7 +41,7 @@ class Client(Thread):
             print(typeMsg + '\nPlacar final')
             print(msg + '\n')
             print('Chat Ligado\nPara sair da sala digite \'quit\'\nPara começar uma nova partida o host da sala deve digitar\'start\'') 
-        elif typeMsg == constants.LOTATION_MESSAGE or constants.GAME_RUNNING:
+        elif typeMsg == (constants.LOTATION_MESSAGE or constants.GAME_RUNNING):
             self.isJoinAnotherRoom(typeMsg)
         else:
             print(msg + '\n') 
@@ -76,7 +76,7 @@ class Client(Thread):
             self.join()
     
     def getServerAddress(self):
-        if self.serverAddress not in constants.HOST_ADDRESS and self.serverAddress != self.clientAddress:
+        if (self.serverAddress not in constants.HOST_ADDRESS and self.serverAddress != self.clientAddress):
             time.sleep(1)
             self.serverAddress = input('Digite endereço da partida: ') #If client is not a Host
             print()
