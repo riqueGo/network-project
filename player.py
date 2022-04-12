@@ -38,8 +38,9 @@ class ListOfPlayers:
         return allPlayers
     
     def scoreBoard(self):
+        sortedPlayerList = sorted(self.listOfPlayers.values(), key=lambda p: p.score, reverse=True)
         allPlayers = '================================================================\n'
-        for p, i in enumerate (self.listOfPlayers.values().sort(key=lambda p: p.score, reverse=True)):
+        for i, p in enumerate (sortedPlayerList):
             allPlayers += str(i) + ' ' + p.name + '    ' + str(p.score) + ' pontos\n'
         allPlayers += '================================================================\n\n'
         return allPlayers
@@ -50,6 +51,6 @@ class ListOfPlayers:
     def removePointsFromNotAnsweredPlayers(self):
         for p in self.listOfPlayers.values():
             if p.answered == False:
-                p.score -= 1
+                p.score -= constants.NO_SCORE
             p.answered = False
 

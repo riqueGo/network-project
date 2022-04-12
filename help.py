@@ -1,4 +1,5 @@
 import client_server_controller
+import constants
 
 def menu():
     while True:
@@ -56,9 +57,9 @@ def gameRules():
     '================================================================\n\n' +
     '- Após o início da partida, não será permitido a entrada de novos participantes\n' +
     '- A rodada será encerrada quando um participante acertar a resposta ou atingir um tempo de 10 segundos\n' +
-    '- Para resposta correta = 25 pontos; Para incorreta = -5 pontos; Sem resposta = -1 ponto\n' + 
-    '- Cada partida terá 5 rodadas\n' +
-    '- A partida é composta de, no máximo, 5 jogadores\n' +
+    '- Para resposta correta = ' + str(constants.TO_SCORE) + ' pontos; Para incorreta = -' + str(constants.TO_SCORE) + ' pontos; Sem resposta = -' + str(constants.TO_SCORE) + ' pontos\n' + 
+    '- Cada partida terá ' + str(constants.MAX_ROUNDS) + ' rodadas\n' +
+    '- A partida é composta de, no máximo, ' + str(constants.MAX_PLAYERS) + ' jogadores\n' +
     '- Não é permitido a entrada de novos participantes após o início da partida\n' + 
     '- Apenas o host pode dar início ao jogo\n' +
     '- Não é póssível acessar o menu enquanto a partida estiver em andamento\n\n')

@@ -1,9 +1,10 @@
 #Game Settings
 PORT = 12000 #sudo netstat -ap | grep :12000
-MAX_ROUNDS = 2
+MAX_ROUNDS = 5
 MAX_PLAYERS = 5
 TO_SCORE = 25
 LOSE_SCORE = 5
+NO_SCORE = 1
 HOST_ADDRESS = ['0.0.0.0', '127.0.1.1', '127.0.0.1']
 
 

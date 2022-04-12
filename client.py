@@ -18,9 +18,14 @@ class Client(Thread):
         self.chat = Chat()
 
     def run(self):
+        self.client.settimeout(20)
         while self.clientOn:
-            bytesMessage, serverAddress = self.client.recvfrom(2048)
-            self.wichClientMessage(bytesMessage.decode())
+            try:
+                bytesMessage, serverAddress = self.client.recvfrom(2048)
+                message = bytesMessage.decode()
+            except:
+                message = ('Sem resposta do servidor#' + constants.TIMEOUT)
+            self.wichClientMessage(message)
     
     def wichClientMessage(self, responseMessage):
         tupleMessage = responseMessage.split('#')
@@ -31,7 +36,7 @@ class Client(Thread):
             print(msg + '\n') 
             self.clientOn = False
         elif typeMsg == constants.GAME_START:
-            print('Chat Desligado, bom jogo\n')
+            print('Chat Fechado. Bom jogo!\n')
             self.chat.isChatAlive = False
             self.chat.isGameOn = True
             print(msg + '\n') 
@@ -40,7 +45,7 @@ class Client(Thread):
             self.chat.isGameOn = False
             print(typeMsg + '\nPlacar final')
             print(msg + '\n')
-            print('Chat Ligado\nPara sair da sala digite \'quit\'\nPara começar uma nova partida o host da sala deve digitar\'start\'') 
+            print('Chat Aberto\nPara sair da sala digite \'quit\'') 
         elif typeMsg == (constants.LOTATION_MESSAGE or constants.GAME_RUNNING):
             self.isJoinAnotherRoom(typeMsg)
         else:

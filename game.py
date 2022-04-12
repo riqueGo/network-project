@@ -32,7 +32,7 @@ class Game:
             self.timer.turnOff()
             return (constants.DISCONNECTED_SERVER + '#' + constants.DISCONNECTED_SERVER, constants.ALL_PLAYER_MESSAGE) #If Host disconnect so disconnect all players
         name = self.players.removePlayer(clientIpAddress).name
-        return (name + constants.REMOVE_PLAYER + '#' + constants.PRINT_MESSAGE, constants.ALL_PLAYER_MESSAGE)
+        return (name + ' ' + constants.REMOVE_PLAYER + '#' + constants.PRINT_MESSAGE, constants.ALL_PLAYER_MESSAGE)
     
 
     def startRound(self):
