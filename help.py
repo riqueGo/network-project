@@ -6,7 +6,9 @@ def menu():
         'Escolha uma opção de acordo com o número abaixo:\n\n' +
         '1 - Criar Partida\n' +
         '2 - Entrar em uma partida\n' + 
-        '3 - Sair do Jogo\n\n')
+        '3 - Sair do Jogo\n' +
+        '4 - Lista de Comandos\n' +
+        '5 - Regras do jogo\n\n')
 
         if choice == '1':
             client_server_controller.createHostSession()
@@ -16,8 +18,12 @@ def menu():
             break
         elif choice == '3':
             break
+        elif choice == '4':
+            commandsList()
+        elif choice == '5':
+            gameRules()
         else:
-            print('Escolha uma opção válida: (\'1\' ou \'2\' ou \'3\')\n\n')
+            print('Escolha um número válido\n\n')
 
 def joinAnotherRoom(motive):
     while True:
@@ -28,13 +34,34 @@ def joinAnotherRoom(motive):
 
         if choice == '1':
             return True
-        elif choice == '2':
+        elif choice == '2' or choice == '\menu':
             return False
         else:
             print('Escolha uma opção válida: (\'1\' ou \'2\')\n\n')
 
+def commandsList():
+    while True:
+        choice = input('\'/start\' - Para iniciar a partida\n' +
+        '\'/quit\' - Para deixar a partida\n' +
+        '\'/menu\' - Para retornar ao menu principal\n')
 
-
+        if choice == '\menu':
+            break
+        else:
+            print('Digite \'/menu\' para retornar ao menu principal')
+        
+def gameRules():
+    print ('================================================================\n' +
+'                          Regras do Jogo\n' +
+    '================================================================\n\n' +
+    '- Após o início da partida, não será permitido a entrada de novos participantes\n' +
+    '- A rodada será encerrada quando um participante acertar a resposta ou atingir um tempo de 10 segundos\n' +
+    '- Para resposta correta = 25 pontos; Para incorreta = -5 pontos; Sem resposta = -1 ponto\n' + 
+    '- Cada partida terá 5 rodadas\n' +
+    '- A partida é composta de, no máximo, 5 jogadores\n' +
+    '- Não é permitido a entrada de novos participantes após o início da partida\n' + 
+    '- Apenas o host pode dar início ao jogo\n' +
+    '- Não é póssível acessar o menu enquanto a partida estiver em andamento\n\n')
 
 
 

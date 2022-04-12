@@ -13,7 +13,8 @@ START_ROUND = 'START ROUND'
 ANSWER = 'ANSWER'
 WRONG_ANSWER = 'Você Errou! Perdeu ' + str(LOSE_SCORE) + ' Pontos'
 CORRECT_ANSWER = 'Acertou! ganhou ' + str(TO_SCORE) + ' Pontos'
-LOTATION_MESSAGE = 'Não é possível entrar, partida lotada'
+LOTATION_MESSAGE = 'partida lotada'
+GAME_RUNNING = 'jogo em andamento'
 GAME_ENDED = 'Acabou o Jogo'
 PRINT_MESSAGE = 'PRINT MESSAGE'
 
@@ -21,14 +22,14 @@ PRINT_MESSAGE = 'PRINT MESSAGE'
 # From Client to Server Messages
 ADD_PLAYER = 'ADD PLAYER'
 REMOVE_PLAYER = 'saiu do Jogo'
-QUIT = 'QUIT'
+QUIT = '/QUIT'
 CHAT = 'CHAT'
-START_COMMAND = 'START'
+START_COMMAND = '/START'
 GAME_START = 'O jogo vai começar'
+INVALID_ADDRESS = 'Endereço Inválido'
 
 
 # Manipulation Messages
 ALL_PLAYER_MESSAGE = 'ALL PLAYER MESSAGE'
 SINGLE_PLAYER_MESSAGE = 'SINGLE PLAYER MESSAGE'
 TIMEOUT = 'TIMEOUT'
-INVALID_ADDRESS = 'Endereço Inválido'
