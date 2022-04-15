@@ -42,8 +42,11 @@ def commandsList():
     print('================================================================\n' +
 '                          Comandos do Jogo\n' +
     '================================================================\n\n' +
+    'Esses comandos são apenas validos dentro da sala do jogo\n' +
     '\'/start\' - Para iniciar a partida (Apenas o host)\n' +
-    '\'/quit\' - Para deixar a partida\n\n')
+    '\'/quit\' - Para deixar a partida\n' +
+    '\'/connected\' - Para ver os jogadores conectados na partida\n' + 
+    '\'/help\' - Para exibir os comandos do jogo\n\n')
 
         
 def gameRules():

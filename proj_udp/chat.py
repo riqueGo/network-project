@@ -1,7 +1,6 @@
 from threading import Thread
-import socket
 import constants
-import time
+import help
 
 
 class Chat(Thread):
@@ -9,24 +8,30 @@ class Chat(Thread):
         Thread.__init__(self)
         self.serverAddress = None
         self.clientSocket = None
-        self.isChatAlive = True
+        self.isChatOn = True
         self.isGameOn = False
+        self.isChatAlive = True
     
     def run(self):
-        while True:
+        while self.isChatAlive:
             message = input()
             if message.upper() == constants.QUIT:
                 msg = constants.REMOVE_PLAYER + '#' + constants.REMOVE_PLAYER
-                self.clientSocket.sendto(msg.encode(), (self.serverAddress, constants.PORT))
                 self.clientSocket.sendto(msg.encode(), self.clientSocket.getsockname())
+                self.clientSocket.sendto(msg.encode(), (self.serverAddress, constants.PORT))
                 break
             elif message.upper() == constants.START_COMMAND:
                 message += '#' + constants.GAME_START
+            elif message.upper() == constants.CONNECTED_PLAYERS:
+                message += '#' + constants.CONNECTED_PLAYERS
+            elif message.upper() == constants.HELP:
+                help.commandsList()
             elif self.isGameOn:
                 message += '#' + constants.ANSWER
-            elif self.isChatAlive:
+            elif self.isChatOn:
                 message += '#' + constants.CHAT
             else:
                 print('Não é possível enviar mensagem no momento')
                 continue
-            self.clientSocket.sendto(message.encode(), (self.serverAddress, constants.PORT))
+            if self.isChatAlive:
+                self.clientSocket.sendto(message.encode(), (self.serverAddress, constants.PORT))

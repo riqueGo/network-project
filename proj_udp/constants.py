@@ -1,6 +1,6 @@
 #Game Settings
 PORT = 12000 #sudo netstat -ap | grep :12000
-MAX_ROUNDS = 2
+MAX_ROUNDS = 5
 MAX_PLAYERS = 5
 TO_SCORE = 25
 LOSE_SCORE = 5
@@ -23,11 +23,15 @@ PRINT_MESSAGE = 'PRINT MESSAGE'
 # From Client to Server Messages
 ADD_PLAYER = 'ADD PLAYER'
 REMOVE_PLAYER = 'saiu do Jogo'
-QUIT = '/QUIT'
 CHAT = 'CHAT'
-START_COMMAND = '/START'
 GAME_START = 'O jogo vai começar'
 INVALID_ADDRESS = 'Endereço Inválido'
+
+#Game Commands
+START_COMMAND = '/START'
+CONNECTED_PLAYERS = '/CONNECTED'
+QUIT = '/QUIT'
+HELP = '/HELP'
 
 
 # Manipulation Messages

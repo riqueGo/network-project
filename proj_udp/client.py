@@ -33,15 +33,17 @@ class Client(Thread):
         typeMsg = tupleMessage[1]
 
         if typeMsg in self.breakMessages:
-            print(msg + '\n') 
+            if typeMsg == constants.DISCONNECTED_SERVER:
+                print(msg + '\nPressione enter para voltar ao menu principal')
+                self.isChatAlive = False 
             self.clientOn = False
         elif typeMsg == constants.GAME_START:
             print('Chat Fechado. Bom jogo!\n\n')
-            self.chat.isChatAlive = False
+            self.chat.isChatOn = False
             self.chat.isGameOn = True
             print(msg + '\n') 
         elif typeMsg == constants.GAME_ENDED:
-            self.chat.isChatAlive = True
+            self.chat.isChatOn = True
             self.chat.isGameOn = False
             print(typeMsg + '\nPlacar final')
             print(msg + '\n')

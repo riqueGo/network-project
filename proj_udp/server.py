@@ -17,7 +17,6 @@ class Server(Thread):
         while True:
             bytesMessage, clientAddress = self.server.recvfrom(2048)
             if self.stopServer:
-                game.sendMessageToAllPlayers(constants.DISCONNECTED_SERVER + '#' + constants.DISCONNECTED_SERVER)
                 break
             message = game.wichServerMessage(bytesMessage.decode(), clientAddress)
             game.sendMessage(message, clientAddress)

@@ -79,3 +79,6 @@ class Game:
         self.timer = Timer(10, self.serverGameIpAddress)
         self.timer.start()
         return (self.startRound(), constants.ALL_PLAYER_MESSAGE)
+    
+    def connectedPlayersMessage(self):
+        return (self.players.listAllPlayers() + '#' + constants.PRINT_MESSAGE, constants.SINGLE_PLAYER_MESSAGE)

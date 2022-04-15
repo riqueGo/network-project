@@ -1,6 +1,5 @@
 import socket
 import constants
-import help
 from server import Server
 from client import Client
 
@@ -43,7 +42,8 @@ def getLocalIp():
 def turnOffServer(server):
     server.stopServer = True
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    sock.sendto(constants.DISCONNECTED_SERVER.encode(), (server.serverAddress, constants.PORT))
+    msg = constants.DISCONNECTED_SERVER+'#'+constants.DISCONNECTED_SERVER
+    sock.sendto(msg.encode(), (server.serverAddress, constants.PORT))
 
 
 def turnOnServer(server):
