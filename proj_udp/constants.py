@@ -1,6 +1,6 @@
 #Game Settings
 PORT = 12000 #sudo netstat -ap | grep :12000
-MAX_ROUNDS = 5
+MAX_ROUNDS = 2
 MAX_PLAYERS = 5
 TO_SCORE = 25
 LOSE_SCORE = 5
@@ -15,7 +15,7 @@ ANSWER = 'ANSWER'
 WRONG_ANSWER = 'Você Errou! Perdeu ' + str(LOSE_SCORE) + ' Pontos'
 CORRECT_ANSWER = 'Acertou! ganhou ' + str(TO_SCORE) + ' Pontos'
 LOTATION_MESSAGE = 'partida lotada'
-GAME_RUNNING = 'jogo em andamento'
+GAME_RUNNING = 'Jogo já esta em andamento'
 GAME_ENDED = 'Acabou o Jogo'
 PRINT_MESSAGE = 'PRINT MESSAGE'
 

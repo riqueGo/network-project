@@ -36,7 +36,7 @@ class Client(Thread):
             print(msg + '\n') 
             self.clientOn = False
         elif typeMsg == constants.GAME_START:
-            print('Chat Fechado. Bom jogo!\n')
+            print('Chat Fechado. Bom jogo!\n\n')
             self.chat.isChatAlive = False
             self.chat.isGameOn = True
             print(msg + '\n') 
@@ -45,7 +45,7 @@ class Client(Thread):
             self.chat.isGameOn = False
             print(typeMsg + '\nPlacar final')
             print(msg + '\n')
-            print('Chat Aberto\nPara sair da sala digite \'quit\'') 
+            print('Chat Aberto\nPara sair da sala digite \'/quit\'') 
         elif typeMsg == (constants.LOTATION_MESSAGE or constants.GAME_RUNNING):
             self.isJoinAnotherRoom(typeMsg)
         else:
@@ -76,6 +76,7 @@ class Client(Thread):
         self.getServerAddress()
         self.joinGameRoom()
         if self.clientOn:
+            help.commandsList()
             self.startChat()
             self.start()
             self.join()

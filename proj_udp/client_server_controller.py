@@ -19,13 +19,11 @@ def createHostSession():
 
     #When host quits of game
     turnOffServer(s)
-    help.menu()
 
 
 def createSession():
     player = Client()
     player.startGame()
-    help.menu()
 
 
 def getLocalIp():

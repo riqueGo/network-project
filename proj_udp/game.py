@@ -9,7 +9,7 @@ class Game:
         self.players = ListOfPlayers()
         self.listQuiz = random.sample(quiz.listOfQuiz,constants.MAX_ROUNDS)
         self.answerOfCurrentRound = None
-        self.timer = Timer(10, serverGameIpAddress)
+        self.timer = None
         self.serverGameIpAddress = serverGameIpAddress
         self.gameOn = False
 
@@ -29,13 +29,17 @@ class Game:
     
     def removePlayer(self, clientIpAddress):
         if (clientIpAddress == self.serverGameIpAddress or clientIpAddress in constants.HOST_ADDRESS):
-            self.timer.turnOff()
+            try:
+                self.timer.turnOff()
+            except:
+                pass
             return (constants.DISCONNECTED_SERVER + '#' + constants.DISCONNECTED_SERVER, constants.ALL_PLAYER_MESSAGE) #If Host disconnect so disconnect all players
         name = self.players.removePlayer(clientIpAddress).name
         return (name + ' ' + constants.REMOVE_PLAYER + '#' + constants.PRINT_MESSAGE, constants.ALL_PLAYER_MESSAGE)
     
 
     def startRound(self):
+        self.players.removePointsFromNotAnsweredPlayers()
         message = self.players.scoreBoard() + '\n'
         try:
             roundGame = constants.MAX_ROUNDS - len(self.listQuiz) + 1
@@ -45,10 +49,12 @@ class Game:
             message += quizTuple[0] + '\n\n'
             message += '#' + constants.START_ROUND
             self.timer.count = 0
-            self.players.removePointsFromNotAnsweredPlayers()
         except:
             self.timer.turnOff()
+            self.gameOn = False
             message += '#' + constants.GAME_ENDED
+            self.listQuiz = random.sample(quiz.listOfQuiz,constants.MAX_ROUNDS)
+            self.players.resetListPlayers()
         return message
 
     
@@ -67,8 +73,9 @@ class Game:
         return (self.startRound(), constants.ALL_PLAYER_MESSAGE)
     
     def gameStartMessage(self):
-        try:
-            self.timer.start()
-        except:
-            self.timer.on = True
+        if self.gameOn:
+            return (constants.GAME_RUNNING + '#' + constants.PRINT_MESSAGE, constants.SINGLE_PLAYER_MESSAGE)
+        self.gameOn = True
+        self.timer = Timer(10, self.serverGameIpAddress)
+        self.timer.start()
         return (self.startRound(), constants.ALL_PLAYER_MESSAGE)

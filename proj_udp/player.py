@@ -41,7 +41,7 @@ class ListOfPlayers:
         sortedPlayerList = sorted(self.listOfPlayers.values(), key=lambda p: p.score, reverse=True)
         allPlayers = '================================================================\n'
         for i, p in enumerate (sortedPlayerList):
-            allPlayers += str(i) + ' ' + p.name + '    ' + str(p.score) + ' pontos\n'
+            allPlayers += str(i+1) + ' ' + p.name + '    ' + str(p.score) + ' pontos\n'
         allPlayers += '================================================================\n\n'
         return allPlayers
     
@@ -54,3 +54,7 @@ class ListOfPlayers:
                 p.score -= constants.NO_SCORE
             p.answered = False
 
+    def resetListPlayers(self):
+        for p in self.listOfPlayers.values():
+            p.score = 0
+            p.answered = True

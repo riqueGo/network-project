@@ -13,10 +13,8 @@ def menu():
 
         if choice == '1':
             client_server_controller.createHostSession()
-            break
         elif choice == '2':
             client_server_controller.createSession()
-            break
         elif choice == '3':
             break
         elif choice == '4':
@@ -35,21 +33,18 @@ def joinAnotherRoom(motive):
 
         if choice == '1':
             return True
-        elif choice == '2' or choice == '\menu':
+        elif choice == '2':
             return False
         else:
             print('Escolha uma opção válida: (\'1\' ou \'2\')\n\n')
 
 def commandsList():
-    while True:
-        choice = input('\'/start\' - Para iniciar a partida\n' +
-        '\'/quit\' - Para deixar a partida\n' +
-        '\'/menu\' - Para retornar ao menu principal\n')
+    print('================================================================\n' +
+'                          Comandos do Jogo\n' +
+    '================================================================\n\n' +
+    '\'/start\' - Para iniciar a partida (Apenas o host)\n' +
+    '\'/quit\' - Para deixar a partida\n\n')
 
-        if choice == '\menu':
-            break
-        else:
-            print('Digite \'/menu\' para retornar ao menu principal')
         
 def gameRules():
     print ('================================================================\n' +
@@ -57,7 +52,7 @@ def gameRules():
     '================================================================\n\n' +
     '- Após o início da partida, não será permitido a entrada de novos participantes\n' +
     '- A rodada será encerrada quando um participante acertar a resposta ou atingir um tempo de 10 segundos\n' +
-    '- Para resposta correta = ' + str(constants.TO_SCORE) + ' pontos; Para incorreta = -' + str(constants.TO_SCORE) + ' pontos; Sem resposta = -' + str(constants.TO_SCORE) + ' pontos\n' + 
+    '- Para resposta correta = +' + str(constants.TO_SCORE) + ' pontos; Para incorreta = -' + str(constants.LOSE_SCORE) + ' pontos; Sem resposta = -' + str(constants.NO_SCORE) + ' pontos\n' + 
     '- Cada partida terá ' + str(constants.MAX_ROUNDS) + ' rodadas\n' +
     '- A partida é composta de, no máximo, ' + str(constants.MAX_PLAYERS) + ' jogadores\n' +
     '- Não é permitido a entrada de novos participantes após o início da partida\n' + 

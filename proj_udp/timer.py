@@ -12,16 +12,16 @@ class Timer(Thread):
         self.on = True
         self.isRest = True
         self.count = 0
+        self.timerSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
     
     def run(self):
-        sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         while self.on:
             time.sleep(1)
             self.count+=1
             if self.count == self.timeout:
                 msg = constants.START_ROUND + '#' + constants.TIMEOUT
-                sock.sendto(msg.encode(), (self.serverAddress, constants.PORT))
+                self.timerSocket.sendto(msg.encode(), (self.serverAddress, constants.PORT))
                 self.rest()
                 self.count = 0
                 self.isRest = True

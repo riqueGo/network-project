@@ -19,7 +19,8 @@ class GameMessages:
         elif typeMsg == constants.TIMEOUT:
             responseMessage = self.game.timeoutMessage()
         elif typeMsg == constants.GAME_START and (clientAddress[0] == self.serverIpAddress or clientAddress[0] in constants.HOST_ADDRESS):
-            self.sendMessageToAllPlayers(constants.GAME_START + '#' + constants.GAME_START)
+            if self.game.gameOn == False:
+                self.sendMessageToAllPlayers(constants.GAME_START + '#' + constants.GAME_START)
             responseMessage = self.game.gameStartMessage()
         elif typeMsg == constants.ADD_PLAYER:
             responseMessage = self.game.addNewPlayer(msg, clientAddress)
