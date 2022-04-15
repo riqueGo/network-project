@@ -18,9 +18,14 @@ class Client(Thread):
         self.chat = Chat()
 
     def run(self):
+        self.client.settimeout(20)
         while self.clientOn:
-            bytesMessage, serverAddress = self.client.recvfrom(2048)
-            self.wichClientMessage(bytesMessage.decode())
+            try:
+                bytesMessage, serverAddress = self.client.recvfrom(2048)
+                message = bytesMessage.decode()
+            except:
+                message = ('Sem resposta do servidor#' + constants.TIMEOUT)
+            self.wichClientMessage(message)
     
     def wichClientMessage(self, responseMessage):
         tupleMessage = responseMessage.split('#')
@@ -28,20 +33,22 @@ class Client(Thread):
         typeMsg = tupleMessage[1]
 
         if typeMsg in self.breakMessages:
-            print(msg + '\n') 
+            if typeMsg == constants.DISCONNECTED_SERVER:
+                print(msg + '\nPressione enter para voltar ao menu principal')
+                self.isChatAlive = False 
             self.clientOn = False
         elif typeMsg == constants.GAME_START:
-            print('Chat Desligado, bom jogo\n')
-            self.chat.isChatAlive = False
+            print('Chat Fechado. Bom jogo!\n\n')
+            self.chat.isChatOn = False
             self.chat.isGameOn = True
             print(msg + '\n') 
         elif typeMsg == constants.GAME_ENDED:
-            self.chat.isChatAlive = True
+            self.chat.isChatOn = True
             self.chat.isGameOn = False
             print(typeMsg + '\nPlacar final')
             print(msg + '\n')
-            print('Chat Ligado\nPara sair da sala digite \'quit\'\nPara começar uma nova partida o host da sala deve digitar\'start\'') 
-        elif typeMsg == constants.LOTATION_MESSAGE:
+            print('Chat Aberto\nPara sair da sala digite \'/quit\'') 
+        elif typeMsg == (constants.LOTATION_MESSAGE or constants.GAME_RUNNING):
             self.isJoinAnotherRoom(typeMsg)
         else:
             print(msg + '\n') 
@@ -71,12 +78,13 @@ class Client(Thread):
         self.getServerAddress()
         self.joinGameRoom()
         if self.clientOn:
+            help.commandsList()
             self.startChat()
             self.start()
             self.join()
     
     def getServerAddress(self):
-        if self.serverAddress not in constants.HOST_ADDRESS and self.serverAddress != self.clientAddress:
+        if (self.serverAddress not in constants.HOST_ADDRESS and self.serverAddress != self.clientAddress):
             time.sleep(1)
             self.serverAddress = input('Digite endereço da partida: ') #If client is not a Host
             print()
