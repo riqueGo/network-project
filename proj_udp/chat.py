@@ -17,7 +17,6 @@ class Chat(Thread):
             message = input()
             if message.upper() == constants.QUIT:
                 msg = constants.REMOVE_PLAYER + '#' + constants.REMOVE_PLAYER
-                self.clientSocket.sendto(msg.encode(), self.clientSocket.getsockname())
                 self.clientSocket.sendto(msg.encode(), (self.serverAddress, constants.PORT))
                 break
             elif message.upper() == constants.START_COMMAND:

@@ -25,7 +25,11 @@ class GameMessages:
         elif typeMsg == constants.ADD_PLAYER:
             responseMessage = self.game.addNewPlayer(msg, clientAddress)
         elif typeMsg == constants.REMOVE_PLAYER:
-            responseMessage = self.game.removePlayer(clientAddress[0])
+            if (clientAddress[0] == self.serverIpAddress or clientAddress[0] in constants.HOST_ADDRESS):
+                responseMessage = self.game.removeHostPlayer()
+            else:
+                responseMessage = self.game.removePlayer(clientAddress[0])
+                self.sendMessageToSinglePlayer(constants.REMOVE_PLAYER + '#' + constants.REMOVE_PLAYER, clientAddress)
         elif typeMsg == constants.CONNECTED_PLAYERS:
             responseMessage = self.game.connectedPlayersMessage()
         else:

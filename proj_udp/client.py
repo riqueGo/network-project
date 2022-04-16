@@ -33,8 +33,6 @@ class Client(Thread):
         typeMsg = tupleMessage[1]
 
         if typeMsg in self.breakMessages:
-            if typeMsg == constants.DISCONNECTED_SERVER:
-                print(msg + '\nPressione enter para voltar ao menu principal')
             self.isChatAlive = False
             self.clientOn = False
         elif typeMsg == constants.GAME_START:
