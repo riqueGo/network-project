@@ -33,9 +33,10 @@ class Client(Thread):
         typeMsg = tupleMessage[1]
 
         if typeMsg in self.breakMessages:
-            if typeMsg == constants.DISCONNECTED_SERVER:
-                print(msg + '\nPressione enter para voltar ao menu principal')
-                self.isChatAlive = False 
+            if typeMsg == constants.DISCONNECTED_SERVER and not help.isHost(self.clientAddress, self.serverAddress):
+                print(msg)
+            print('Você saiu da sala, pressione enter para voltar ao menu principal')
+            self.chat.isChatAlive = False
             self.clientOn = False
         elif typeMsg == constants.GAME_START:
             print('Chat Fechado. Bom jogo!\n\n')
@@ -48,13 +49,12 @@ class Client(Thread):
             print(typeMsg + '\nPlacar final')
             print(msg + '\n')
             print('Chat Aberto\nPara sair da sala digite \'/quit\'') 
-        elif typeMsg == (constants.LOTATION_MESSAGE or constants.GAME_RUNNING):
-            self.isJoinAnotherRoom(typeMsg)
+        elif typeMsg == constants.LOTATION_MESSAGE or typeMsg == constants.GAME_RUNNING:
+            self.notPossibleToJoinRoom(typeMsg)
         else:
             print(msg + '\n') 
     
     def joinPlayer(self):
-        time.sleep(1)
         self.name = input('Digite seu nickname: ')
     
     def joinGameRoom(self):
@@ -66,7 +66,7 @@ class Client(Thread):
             self.client.settimeout(None)
             self.wichClientMessage(bytesMessage.decode())
         except:
-            self.isJoinAnotherRoom(constants.INVALID_ADDRESS)
+            self.notPossibleToJoinRoom(constants.INVALID_ADDRESS)
     
     def startChat(self):
         self.chat.serverAddress = self.serverAddress
@@ -81,19 +81,15 @@ class Client(Thread):
             help.commandsList()
             self.startChat()
             self.start()
-            self.join()
+            self.chat.join()
     
     def getServerAddress(self):
-        if (self.serverAddress not in constants.HOST_ADDRESS and self.serverAddress != self.clientAddress):
-            time.sleep(1)
+        if (not help.isHost(self.clientAddress, self.serverAddress)):
             self.serverAddress = input('Digite endereço da partida: ') #If client is not a Host
             print()
     
-    def isJoinAnotherRoom(self, motive):
-        if help.joinAnotherRoom(motive):
-            self.startGame()
-        else:
-            self.clientOn = False
-
+    def notPossibleToJoinRoom(self, motive):
+        self.clientOn = False
+        print('Não foi possível entrar na sala, ' + motive + '\n')
 
                 

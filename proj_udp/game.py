@@ -28,15 +28,15 @@ class Game:
 
     
     def removePlayer(self, clientIpAddress):
-        if (clientIpAddress == self.serverGameIpAddress or clientIpAddress in constants.HOST_ADDRESS):
-            try:
-                self.timer.turnOff()
-            except:
-                pass
-            return (constants.DISCONNECTED_SERVER + '#' + constants.DISCONNECTED_SERVER, constants.ALL_PLAYER_MESSAGE) #If Host disconnect so disconnect all players
         name = self.players.removePlayer(clientIpAddress).name
         return (name + ' ' + constants.REMOVE_PLAYER + '#' + constants.PRINT_MESSAGE, constants.ALL_PLAYER_MESSAGE)
     
+    def removeHostPlayer(self):
+        try:
+            self.timer.turnOff()
+        except:
+            pass
+        return (constants.DISCONNECTED_SERVER + '#' + constants.DISCONNECTED_SERVER, constants.ALL_PLAYER_MESSAGE) #If Host disconnect so disconnect all players
 
     def startRound(self):
         self.players.removePointsFromNotAnsweredPlayers()

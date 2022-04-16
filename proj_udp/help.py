@@ -24,19 +24,6 @@ def menu():
         else:
             print('Escolha um número válido\n\n')
 
-def joinAnotherRoom(motive):
-    while True:
-        choice = input('Não foi possível entrar na sala, ' + motive + '\n' +
-            'Escolha uma opção de acordo com o número abaixo:\n\n' +
-            '1 - Tentar entrar em outra sala\n' +
-            '2 - Voltar ao menu principal\n\n')
-
-        if choice == '1':
-            return True
-        elif choice == '2':
-            return False
-        else:
-            print('Escolha uma opção válida: (\'1\' ou \'2\')\n\n')
 
 def commandsList():
     print('================================================================\n' +
@@ -62,6 +49,8 @@ def gameRules():
     '- Apenas o host pode dar início ao jogo\n' +
     '- Não é póssível acessar o menu enquanto a partida estiver em andamento\n\n')
 
+def isHost(clientIpAddress, serverIpAddress):
+    return clientIpAddress in constants.HOST_ADDRESS or clientIpAddress == serverIpAddress
 
 
 
