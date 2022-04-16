@@ -49,6 +49,8 @@ def gameRules():
     '- Apenas o host pode dar início ao jogo\n' +
     '- Não é póssível acessar o menu enquanto a partida estiver em andamento\n\n')
 
+def isHost(clientIpAddress, serverIpAddress):
+    return clientIpAddress in constants.HOST_ADDRESS or clientIpAddress == serverIpAddress
 
 
 
