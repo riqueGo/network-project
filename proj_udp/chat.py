@@ -26,6 +26,7 @@ class Chat(Thread):
                 message += '#' + constants.CONNECTED_PLAYERS
             elif message.upper() == constants.HELP:
                 help.commandsList()
+                continue
             elif self.isGameOn:
                 message += '#' + constants.ANSWER
             elif self.isChatOn:

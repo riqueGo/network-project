@@ -1,5 +1,3 @@
-import socket
-import constants
 from threading import Thread
 from game_messages import GameMessages
 import client_server_controller
