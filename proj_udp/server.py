@@ -11,7 +11,7 @@ class Server(Thread):
 
 
     def run(self):
-        game = GameMessages(serverIpAddress = self.serverAddress)
+        game = GameMessages(serverIpAddress = self.serverAddress, serverSocket= self.server)
         while True:
             bytesMessage, clientAddress = self.server.recvfrom(2048)
             if self.stopServer:
