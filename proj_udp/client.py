@@ -33,7 +33,9 @@ class Client(Thread):
         typeMsg = tupleMessage[1]
 
         if typeMsg in self.breakMessages:
-            self.isChatAlive = False
+            if typeMsg == constants.DISCONNECTED_SERVER:
+                print(msg + '\nPressione enter para voltar ao menu principal')
+            self.chat.isChatAlive = False
             self.clientOn = False
         elif typeMsg == constants.GAME_START:
             print('Chat Fechado. Bom jogo!\n\n')
@@ -79,7 +81,7 @@ class Client(Thread):
             help.commandsList()
             self.startChat()
             self.start()
-            self.join()
+            self.chat.join()
     
     def getServerAddress(self):
         if (self.serverAddress not in constants.HOST_ADDRESS and self.serverAddress != self.clientAddress):
