@@ -49,7 +49,7 @@ class Client(Thread):
             print(msg + '\n')
             print('Chat Aberto\nPara sair da sala digite \'/quit\'') 
         elif typeMsg == (constants.LOTATION_MESSAGE or constants.GAME_RUNNING):
-            self.isJoinAnotherRoom(typeMsg)
+            self.notPossibleToJoinRoom(typeMsg)
         else:
             print(msg + '\n') 
     
@@ -66,7 +66,7 @@ class Client(Thread):
             self.client.settimeout(None)
             self.wichClientMessage(bytesMessage.decode())
         except:
-            self.isJoinAnotherRoom(constants.INVALID_ADDRESS)
+            self.notPossibleToJoinRoom(constants.INVALID_ADDRESS)
     
     def startChat(self):
         self.chat.serverAddress = self.serverAddress
@@ -89,11 +89,9 @@ class Client(Thread):
             self.serverAddress = input('Digite endereço da partida: ') #If client is not a Host
             print()
     
-    def isJoinAnotherRoom(self, motive):
-        if help.joinAnotherRoom(motive):
-            self.startGame()
-        else:
-            self.clientOn = False
+    def notPossibleToJoinRoom(self, motive):
+        self.clientOn = False
+        print('Não foi possível entrar na sala, ' + motive)
 
 
                 
