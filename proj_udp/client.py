@@ -34,7 +34,8 @@ class Client(Thread):
 
         if typeMsg in self.breakMessages:
             if typeMsg == constants.DISCONNECTED_SERVER and not help.isHost(self.clientAddress, self.serverAddress):
-                print(msg + '\nPressione enter para voltar ao menu principal')
+                print(msg)
+            print('Você saiu da sala, pressione enter para voltar ao menu principal')
             self.chat.isChatAlive = False
             self.clientOn = False
         elif typeMsg == constants.GAME_START:
@@ -54,7 +55,6 @@ class Client(Thread):
             print(msg + '\n') 
     
     def joinPlayer(self):
-        time.sleep(1)
         self.name = input('Digite seu nickname: ')
     
     def joinGameRoom(self):
@@ -85,12 +85,11 @@ class Client(Thread):
     
     def getServerAddress(self):
         if (not help.isHost(self.clientAddress, self.serverAddress)):
-            time.sleep(1)
             self.serverAddress = input('Digite endereço da partida: ') #If client is not a Host
             print()
     
     def notPossibleToJoinRoom(self, motive):
         self.clientOn = False
-        print('Não foi possível entrar na sala, ' + motive)
+        print('Não foi possível entrar na sala, ' + motive + '\n')
 
                 

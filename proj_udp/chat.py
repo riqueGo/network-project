@@ -16,9 +16,7 @@ class Chat(Thread):
         while self.isChatAlive:
             message = input()
             if message.upper() == constants.QUIT:
-                msg = constants.REMOVE_PLAYER + '#' + constants.REMOVE_PLAYER
-                self.clientSocket.sendto(msg.encode(), (self.serverAddress, constants.PORT))
-                break
+                message = constants.REMOVE_PLAYER + '#' + constants.REMOVE_PLAYER
             elif message.upper() == constants.START_COMMAND:
                 message += '#' + constants.GAME_START
             elif message.upper() == constants.CONNECTED_PLAYERS:

@@ -9,7 +9,7 @@ HOST_ADDRESS = ['0.0.0.0', '127.0.1.1', '127.0.0.1']
 
 
 # From Server to Client Messages
-DISCONNECTED_SERVER = 'SERVIDOR DESCONECTADO'
+DISCONNECTED_SERVER = 'Servidor desconectado'
 START_ROUND = 'START ROUND'
 ANSWER = 'ANSWER'
 WRONG_ANSWER = 'Você Errou! Perdeu ' + str(LOSE_SCORE) + ' Pontos'
