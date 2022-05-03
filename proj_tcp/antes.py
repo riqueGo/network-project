@@ -1,6 +1,5 @@
 from socket import socket, AF_INET, SOCK_STREAM
 from _thread import *
-import os
 
 host = 'localhost'
 porta = 80
@@ -35,18 +34,11 @@ def servidor(socket_client):
         print('Requisição do cliente:', requisicao, metodo)
         meu_arquivo = requisicao.lstrip('/')
         if meu_arquivo == '':
-            meu_arquivo = 'index.html'
+            meu_arquivo = 'modelo.html'
         try:
-
-            variavel = ""
-            for x in os.listdir("C:\\Users\\dante\\Documents\\GitHub\\network-project\\proj_tcp"):
-                variavel += "<p><a href=\"./" + x + "\" title= \"link\"target=\"_blank\">" + x + "</a></p>"
-
-            arquivo = open(meu_arquivo, 'r')
+            arquivo = open(meu_arquivo,'rb')
             arquivo_lido = arquivo.read()
-            arquivo_lido = arquivo_lido.replace("{variavel}", variavel)
-            arquivo_lido = arquivo_lido.encode("utf-8")
-            print(arquivo)
+            arquivo.close()
             if meu_arquivo.endswith('.html'):
                 mimetype = 'text/html'
             elif meu_arquivo.endswith('.htm'):
