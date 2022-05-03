@@ -1,3 +1,4 @@
+from datetime import datetime
 from socket import socket, AF_INET, SOCK_STREAM
 from _thread import *
 import os
@@ -5,6 +6,7 @@ import os
 host = 'localhost'
 porta = 80
 modelo = "modelo.html"
+
 
 def servidor(socket_client):
     while True:
@@ -37,16 +39,6 @@ def servidor(socket_client):
         if meu_arquivo == '':
             meu_arquivo = 'index.html'
         try:
-
-            variavel = ""
-            for x in os.listdir("C:\\Users\\dante\\Documents\\GitHub\\network-project\\proj_tcp"):
-                variavel += "<p><a href=\"./" + x + "\" title= \"link\"target=\"_blank\">" + x + "</a></p>"
-
-            arquivo = open(meu_arquivo, 'r')
-            arquivo_lido = arquivo.read()
-            arquivo_lido = arquivo_lido.replace("{variavel}", variavel)
-            arquivo_lido = arquivo_lido.encode("utf-8")
-            print(arquivo)
             if meu_arquivo.endswith('.html'):
                 mimetype = 'text/html'
             elif meu_arquivo.endswith('.htm'):
@@ -67,25 +59,66 @@ def servidor(socket_client):
                 mimetype = 'image/gif'
             else:
                 mimetype = 'image/jpg'
+
+            arquivo = open(meu_arquivo, 'rb')
+            arquivo_lido = arquivo.read()
+            arquivo.close()
+
             header = 'HTTP/1.1 200 OK\n'
             header += 'Content-Type: ' + str(mimetype) + '\n\n'
+
         except:
-            header = 'HTTP/1.1 404 Not Found\n\n'
-            arquivo_lido = '<html><body><center><h3>Error 404: File not found</h3><p>Documento requisitado nao foi localizado no servidor</p></center></body></html>'
-            arquivo_lido = arquivo_lido.encode('utf-8')
+            if os.path.isdir(meu_arquivo): #nagecacao
+                if meu_arquivo[-1] == "/":
+                    meu_arquivo = meu_arquivo[:-1]
+
+                voltar = "/" + meu_arquivo
+                voltar_url = ""
+                voltar_split = voltar.split("/")
+                voltar_split.remove(voltar_split[-1])
+                for x in voltar_split:
+                    voltar_url += x + "/"
+                variavel = '<a href="' + voltar_url + '">Voltar</a>'
+                for x in os.listdir(meu_arquivo):
+                    local = meu_arquivo + "/" + x
+
+                    y = str(round(os.path.getsize(local)/1024))
+                    z = str(datetime.fromtimestamp(os.path.getmtime(local)))
+                    variavel += "<p><a href=" + local + " title= \"link\"target=\"_blank\">" + x + "</a> - Tamanho: <span style='color: red;'> " + y + "kb - ultima alteracao: </span><span style='color: green;'>" + z +"</span></p>"
+
+                header = 'HTTP/1.1 200 OK\n'
+                header += 'Content-Type: ' + "text/html" + '\n\n'
+                arquivo = open("indexof.html", 'rb')
+                arquivo_lido = arquivo.read()
+                arquivo_lido = arquivo_lido.decode()
+                arquivo_lido = str(arquivo_lido).replace("{variavel}", variavel)
+                arquivo_lido = str(arquivo_lido).replace("{caminho}", meu_arquivo)
+                arquivo_lido = arquivo_lido.encode("utf-8")
+            else:
+                header = 'HTTP/1.1 404 Not Found\n\n'
+                arquivo_lido = '<html><body><center><h3>Error 404: File not found</h3><p>Documento requisitado nao foi localizado no servidor</p></center></body></html>'
+                arquivo_lido = arquivo_lido.encode('utf-8')
+
         resposta_final = header.encode('utf-8')
         resposta_final += arquivo_lido
         socket_client.send(resposta_final)
         break
 
+
 def main():
     socket_server = socket(AF_INET, SOCK_STREAM)
     socket_server.bind((host, porta))
     socket_server.listen(3)
+
+    if not os.path.exists("pasta"):
+        os.makedirs("pasta")
+        print("criou a pasta")
+
     while True:
         socket_client, endereco_cliente = socket_server.accept()
-        start_new_thread(servidor,(socket_client,))
+        start_new_thread(servidor, (socket_client,))
         print(f'Conectado com: {endereco_cliente[0]}:{endereco_cliente[1]}')
+
 
 if __name__ == "__main__":
     main()
