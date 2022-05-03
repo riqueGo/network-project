@@ -5,8 +5,6 @@ import os
 
 host = 'localhost'
 porta = 80
-modelo = "modelo.html"
-
 
 def servidor(socket_client):
     while True:
@@ -15,7 +13,6 @@ def servidor(socket_client):
             break
         data_decodif = data.decode()
         lista_requisicao = data_decodif.split(' ')
-        #print(lista_requisicao)
         if len(lista_requisicao) < 3 or lista_requisicao[0] != 'GET':
             header = 'HTTP/1.1 400 Bad Request\n\n'
             arquivo_lido = '<html><body><center><h3>Error 400: Bad Request</h3><p>Mensagem de requisicao nao entendida pelo servidor</p></center></body></html>'
@@ -34,7 +31,7 @@ def servidor(socket_client):
             break
         metodo = lista_requisicao[0]
         requisicao = lista_requisicao[1]
-        print('Requisição do cliente:', requisicao, metodo)
+        print('Requisição do cliente:', requisicao,"\nMétodo:", metodo)
         meu_arquivo = requisicao.lstrip('/')
         if meu_arquivo == '':
             meu_arquivo = 'index.html'
@@ -83,18 +80,17 @@ def servidor(socket_client):
                 for x in rota:
                     y = x + "/"
                     voltar_url += y
-                print(voltar_url)
+                #print(voltar_url)
                 variavel = '<a href="' + voltar_url + '">Voltar</a>'
-                print(requisicao)
+                #print(requisicao)
                 for x in os.listdir(meu_arquivo):
-                    print(x)
                     local = requisicao + x
                     try:
                         y = str(round(os.path.getsize(local) / 1024))
                         z = str(datetime.fromtimestamp(os.path.getmtime(local)))
                         variavel += "<p><a href=" + local + " title= \"link\"target=\"_blank\">" + x + "</a> - Tamanho: <span style='color: red;'> " + y + "kb - </span><span style='color: black;'> Ultima alteracao: </span><span style='color: green;'>" + z + "</span></p>"
                     except Exception as e:
-                        print(e)
+                        #print(e)
                         local = str(local).removeprefix("/")
                         y = str(round(os.path.getsize(local) / 1024))
                         z = str(datetime.fromtimestamp(os.path.getmtime(local)))
